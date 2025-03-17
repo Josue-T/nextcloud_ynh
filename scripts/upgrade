@@ -214,6 +214,7 @@ exec_occ() {
     else
         NEXTCLOUD_PHP_VERSION="7.0"
     fi
+    NEXTCLOUD_PHP_VERSION="7.4"
 (cd "$final_path" && ynh_exec_as "$app" \
     php$NEXTCLOUD_PHP_VERSION --define apc.enable_cli=1 occ --no-interaction --no-ansi "$@")
 }
@@ -253,12 +254,12 @@ then
     # Take all apps enabled, and check if mail is one of them
     # Then temporary disable the mail app
     mail_app_must_be_reactived=0
-    
+
     if exec_occ app:list | awk '/Enabled/{f=1;next} /Disabled/{f=0} f' | grep -q -w mail; then
         exec_occ app:disable mail
         mail_app_must_be_reactived=1
     fi
-    
+
     # While the current version is not the last version, do an upgrade
     while [ "$last_version" != "$current_version" ]
     do
@@ -347,7 +348,7 @@ EOF
     exec_occ db:add-missing-columns -n
     exec_occ db:add-missing-primary-keys -n
     exec_occ db:convert-filecache-bigint -n
-    
+
     #=================================================
     # CONFIGURE NEXTCLOUD
     #=================================================
